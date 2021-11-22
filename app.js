@@ -5,10 +5,17 @@ const ctx = canvas.getContext('2d')
 canvas.width = 800
 canvas.height = 500
 let score = 0
+let highScore = localStorage.getItem('game1HighScore') || 0
 let gameFrame = 0
 ctx.font = '30px Georgia'
 let gameSpeed = 1
 let gameOver = false
+
+//screen resize
+document.addEventListener('resize', function(){
+    canvas.width = 800
+    canvas.height = 500
+})
 
 //Mouse interactivity
 let canvasPosition = canvas.getBoundingClientRect()
@@ -77,10 +84,10 @@ class Player{
         }
         // ctx.fillStyle = 'red'
         // ctx.beginPath()
-        // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
+        // ctx.arc(this.x, this.y, this.radius * .8, 0, Math.PI * 2)
         // ctx.fill()
-        // ctx.closePath
-        // ctx.fillRect(this.x, this.y, this.radius, 10 )
+        ctx.closePath
+        ctx.fillRect(this.x, this.y, this.radius, 10 )
         ctx.save()
         ctx.translate(this.x, this.y,)
         ctx.rotate(this.angle)
@@ -198,10 +205,10 @@ class Enemy{
         this.spriteHeight = 397
     }
     draw(){
-        // ctx.fillStyle = 'red'
-        // ctx.beginPath()
-        // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
-        // ctx.fill()
+        ctx.fillStyle = 'red'
+        ctx.beginPath()
+        // ctx.arc(this.x, this.y, this.radius * .8, 0, Math.PI * 2)
+        ctx.fill()
         ctx.drawImage(enemyImage, this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x - 50, this.y - 50, this.spriteWidth / 4, this.spriteHeight / 4)
     }
     update(){
@@ -255,7 +262,9 @@ function animate(){
     handleEnemies();
     ctx.fillStyle = 'black'
     ctx.fillText('Score:' + score, 10, 50)
+    ctx.fillText('Highest Score: ' + highScore, 550, 50)
     gameFrame ++
+    checkHighScore()
     if(!gameOver) requestAnimationFrame(animate)
 }
 animate()
@@ -264,3 +273,11 @@ window.addEventListener('click', function(){
 
     canvasPosition = canvas.getBoundingClientRect()
 })
+
+function checkHighScore(){
+
+    if (score > localStorage.getItem('game1HighScore')){
+        localStorage.setItem('game1HighScore', score)
+        highScore = score
+    }
+}
