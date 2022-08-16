@@ -19,18 +19,18 @@ document.addEventListener('resize', function(){
 
 //Mouse interactivity
 let canvasPosition = canvas.getBoundingClientRect()
-const mouse = {
+const pointer = {
     x: canvas.width/2,
     y: canvas.height/2,
     click: false
 }
-canvas.addEventListener('mousedown', function(event){
-    mouse.click = true
-    mouse.x = event.x - canvasPosition.left
-    mouse.y = event.y - canvasPosition.top
+canvas.addEventListener('pointerdown', function(event){
+    pointer.click = true
+    pointer.x = event.x - canvasPosition.left
+    pointer.y = event.y - canvasPosition.top
 }) 
-canvas.addEventListener('mouseup', function(){
-    mouse.click = false
+canvas.addEventListener('pointerup', function(){
+    pointer.click = false
 })
 //Player
 const playerLeft = new Image()
@@ -50,11 +50,11 @@ class Player{
         this.spriteHeight = 327
     }
     update(){
-        const dx = this.x - mouse.x
-        const dy = this.y - mouse.y
+        const dx = this.x - pointer.x
+        const dy = this.y - pointer.y
         let theta = Math.atan2(dy, dx)
         this.angle = theta
-        if(mouse.x != this.x){
+        if(pointer.x != this.x){
             this.x -= dx/20
             if(gameFrame % 5 === 0){
                 this.frame ++;
@@ -70,16 +70,16 @@ class Player{
                 else this.frameY = 0
             }
         }
-        if(mouse.y != this.y){
+        if(pointer.y != this.y){
             this.y -= dy/20
         }
     }
     draw(){
-        if(mouse.click){
+        if(pointer.click){
             ctx.lineWidth = 2
             ctx.beginPath()
                 ctx.moveTo(this.x, this.y);
-                ctx.lineTo(mouse.x, mouse.y);
+                ctx.lineTo(pointer.x, pointer.y);
                 ctx.stroke()
         }
         // ctx.fillStyle = 'red'
@@ -92,7 +92,7 @@ class Player{
         ctx.translate(this.x, this.y,)
         ctx.rotate(this.angle)
         
-        if(this.x >= mouse.x){
+        if(this.x >= pointer.x){
             ctx.drawImage(playerLeft, this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, this.spriteWidth, this.spriteHeight, 0 - 50, 0 - 40, this.spriteWidth/4, this.spriteHeight/4)
         }else{
             ctx.drawImage(playerRight, this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, this.spriteWidth, this.spriteHeight, 0 - 50, 0 - 40, this.spriteWidth/4, this.spriteHeight/4)
